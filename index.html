@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        .file-manager {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .action-btn {
+            padding: 5px 10px;
+            margin: 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+        .rename-btn {
+            background-color: #ffa500;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+        .add-file-btn {
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .input-group input[type="text"] {
+            padding: 8px;
+            width: 250px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>File Manager</h1>
+
+    <div class="file-manager">
+        <div class="input-group">
+            <input type="text" id="newFileName" placeholder="Enter new file name">
+            <button class="add-file-btn" onclick="addFile()">Add File</button>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="fileTableBody">
+                <!-- File list will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let files = ["Document1.txt", "Image2.png", "Report3.pdf"]; // Sample file list
+
+        // Function to render files on the page
+        function renderFiles() {
+            const tableBody = document.getElementById('fileTableBody');
+            tableBody.innerHTML = ''; // Clear the table body
+
+            files.forEach((file, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${file}</td>
+                    <td>
+                        <button class="action-btn rename-btn" onclick="renameFile(${index})">Rename</button>
+                        <button class="action-btn delete-btn" onclick="deleteFile(${index})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Function to add a new file
+        function addFile() {
+            const newFileName = document.getElementById('newFileName').value;
+            if (newFileName) {
+                files.push(newFileName);
+                renderFiles(); // Re-render the file list
+                document.getElementById('newFileName').value = ''; // Clear the input field
+            }
+        }
+
+        // Function to rename a file
+        function renameFile(index) {
+            const newFileName = prompt('Enter new file name:', files[index]);
+            if (newFileName) {
+                files[index] = newFileName;
+                renderFiles(); // Re-render the file list
+            }
+        }
+
+        // Function to delete a file
+        function deleteFile(index) {
+            if (confirm(`Are you sure you want to delete ${files[index]}?`)) {
+                files.splice(index, 1);
+                renderFiles(); // Re-render the file list
+            }
+        }
+
+        // Initial render of files
+        renderFiles();
+    </script>
+
+</body>
+</html>
